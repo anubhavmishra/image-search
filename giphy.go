@@ -16,7 +16,8 @@ type GiphyImageResponse struct {
 }
 
 type giphyImageHandler struct {
-	APIKey string
+	APIKey     string
+	AprilFools bool
 }
 
 func (g *giphyImageHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
@@ -28,6 +29,16 @@ func (g *giphyImageHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	if !ok || len(keys) < 1 {
 		log.Println("URL parameter 'keyword' is missing")
 		http.Error(w, "Request doesn't have 'keyword' as a URL parameter", http.StatusNotFound)
+		return
+	}
+
+	// If April fools feature flag is set then return
+	// static images
+	if g.AprilFools {
+		json.NewEncoder(w).Encode(GiphyImageResponse{
+			EmbedURL: "https://i.ytimg.com/vi/JrQkgLLL9XQ/hqdefault.jpg",
+			URL:      "https://i.ytimg.com/vi/JrQkgLLL9XQ/hqdefault.jpg",
+		})
 		return
 	}
 
@@ -65,8 +76,9 @@ func (g *giphyImageHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	return
 }
 
-func GiphyImageHandler(apiKey string) http.Handler {
+func GiphyImageHandler(apiKey string, aprilFools bool) http.Handler {
 	return &giphyImageHandler{
-		APIKey: apiKey,
+		APIKey:     apiKey,
+		AprilFools: aprilFools,
 	}
 }

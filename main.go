@@ -24,9 +24,14 @@ func main() {
 	log.Println("Starting image-search app...")
 
 	var apiKey = os.Getenv("GIPHY_API_KEY")
+	var aprilFools = os.Getenv("APRIL_FOOLS")
+	featureFlag := false
+	if aprilFools != "" {
+		featureFlag = true
+	}
 
 	mux := http.NewServeMux()
-	mux.Handle("/", GiphyImageHandler(apiKey))
+	mux.Handle("/", GiphyImageHandler(apiKey, featureFlag))
 	mux.HandleFunc("/healthz", HealthCheck)
 
 	httpServer := manners.NewServer()
