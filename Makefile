@@ -14,7 +14,7 @@ deps: ## Get project dependencies
 build: ## Builds the Go service
 	go build -o image-search .
 
-build-service: ## Build a docker container for the Go service
+build-docker-image: ## Build a docker container for the Go service
 	mkdir -p ./build/linux/amd64
 	GOOS=linux GOARCH=amd64 go build -v -o ./build/linux/amd64/image-search .
 	docker build -t $(IMAGE):$(BUILD_ID) .

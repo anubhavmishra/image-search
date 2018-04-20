@@ -26,7 +26,7 @@ func main() {
 	var apiKey = os.Getenv("GIPHY_API_KEY")
 	var aprilFools = os.Getenv("APRIL_FOOLS")
 	featureFlag := false
-	if aprilFools != "" {
+	if aprilFools == "true" {
 		featureFlag = true
 	}
 
